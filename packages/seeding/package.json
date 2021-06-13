@@ -1,0 +1,26 @@
+{
+  "name": "@atls/typeorm-seeding",
+  "version": "0.0.0",
+  "license": "BSD-3-Clause",
+  "main": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn app library build",
+    "postpack": "rm -rf dist",
+    "prepack": "yarn run build"
+  },
+  "dependencies": {
+    "faker": "^5.5.3",
+    "typeorm": "^0.2"
+  },
+  "devDependencies": {
+    "@types/faker": "^5.5.6",
+    "@types/node": "^14.17.2"
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts"
+  }
+}
