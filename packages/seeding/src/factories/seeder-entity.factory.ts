@@ -42,15 +42,19 @@ export class SeederEntityFactory<Entity extends ObjectLiteral> {
   private generate() {
     const metadata = getMetadataArgsStorage()
 
-    const columns = this.generateColumns(metadata)
+    const columns = this.generateColumns(metadata, Object.keys(this.withData))
 
     return this.repository.merge(this.repository.create(columns), this.withData)
   }
 
-  private generateColumns(metadata): DeepPartial<Entity> {
+  private generateColumns(metadata, exclude: Array<string> = []): DeepPartial<Entity> {
     const columns = metadata.filterColumns(this.entity)
 
     return columns.reduce((result, column) => {
+      if (exclude.includes(column.propertyName)) {
+        return result
+      }
+
       if (!column.options.type) {
         return result
       }
