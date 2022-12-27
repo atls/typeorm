@@ -42,5 +42,8 @@ node_modules
 
 dist
 
+.idea
+*.iml
+
 # next.js output
 .next
