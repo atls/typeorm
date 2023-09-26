@@ -1,17 +1,17 @@
-import { getMetadataArgsStorage } from 'typeorm'
 import { EntityTarget }           from 'typeorm'
 import { ObjectLiteral }          from 'typeorm'
 import { DeepPartial }            from 'typeorm'
 import { Repository }             from 'typeorm'
+import { getMetadataArgsStorage } from 'typeorm'
 
 import { SeederFactoryOptions }   from './seeder-factory.interfaces'
+import { generator }              from '../generators'
 import { isBooleanColumn }        from './typeorm.utils'
 import { isNumberColumn }         from './typeorm.utils'
 import { isDateColumn }           from './typeorm.utils'
 import { isTextColumn }           from './typeorm.utils'
 import { isJsonColumn }           from './typeorm.utils'
 import { isUuidColumn }           from './typeorm.utils'
-import { generator }              from '../generators'
 
 export class SeederEntityFactory<Entity extends ObjectLiteral> {
   private withData: DeepPartial<Entity> = {}

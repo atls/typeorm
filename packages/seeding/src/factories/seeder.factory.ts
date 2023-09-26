@@ -1,7 +1,7 @@
 import { EntityTarget }         from 'typeorm'
 
-import { SeederFactoryOptions } from './seeder-factory.interfaces'
 import { SeederEntityFactory }  from './seeder-entity.factory'
+import { SeederFactoryOptions } from './seeder-factory.interfaces'
 
 export class SeederFactory {
   constructor(private readonly options: SeederFactoryOptions) {}
