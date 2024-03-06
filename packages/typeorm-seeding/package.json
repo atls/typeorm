@@ -1,0 +1,26 @@
+{
+  "name": "@atls/typeorm-seeding",
+  "version": "0.0.3",
+  "license": "BSD-3-Clause",
+  "main": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn library build",
+    "prepack": "yarn run build",
+    "postpack": "rm -rf dist"
+  },
+  "dependencies": {
+    "typeorm": "0.2.41"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "8.0.2",
+    "@types/node": "20.6.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts"
+  }
+}

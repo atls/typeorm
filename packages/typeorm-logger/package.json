@@ -1,7 +1,7 @@
 {
-  "name": "@atls/typeorm-seeding",
-  "version": "0.0.3",
-  "license": "BSD-3-Clause",
+  "name": "@atls/typeorm-logger",
+  "version": "0.0.2",
+  "license": "BSD-3 Clause",
   "main": "src/index.ts",
   "files": [
     "dist"
@@ -12,13 +12,16 @@
     "postpack": "rm -rf dist"
   },
   "dependencies": {
-    "typeorm": "0.2.41"
+    "@atls/logger": "0.0.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "8.0.2",
-    "@types/node": "20.6.2"
+    "typeorm": "0.2"
+  },
+  "peerDependencies": {
+    "typeorm": "0.2"
   },
   "publishConfig": {
+    "access": "public",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts"
   }
