@@ -2,7 +2,7 @@ import { Logger }            from '@atls/logger'
 import { Logger as ILogger } from 'typeorm'
 
 export class TypeOrmLogger implements ILogger {
-  private logger = new Logger('typeorm')
+  private readonly logger = new Logger('typeorm')
 
   logQuery(query: string, parameters?: any[]) {
     this.logger.debug({
