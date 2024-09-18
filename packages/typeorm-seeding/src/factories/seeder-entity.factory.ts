@@ -4,17 +4,16 @@ import { DeepPartial }            from 'typeorm'
 import { Repository }             from 'typeorm'
 import { getMetadataArgsStorage } from 'typeorm'
 
-import { SeederFactoryOptions }   from './seeder-factory.interfaces'
-import { generator }              from '../generators'
-import { isBooleanColumn }        from './typeorm.utils'
-import { isNumberColumn }         from './typeorm.utils'
-import { isDateColumn }           from './typeorm.utils'
-import { isTextColumn }           from './typeorm.utils'
-import { isJsonColumn }           from './typeorm.utils'
-import { isUuidColumn }           from './typeorm.utils'
+import { SeederFactoryOptions }   from './seeder-factory.interfaces.js'
+import { generator }              from '../generators/index.js'
+import { isBooleanColumn }        from './typeorm.utils.js'
+import { isNumberColumn }         from './typeorm.utils.js'
+import { isDateColumn }           from './typeorm.utils.js'
+import { isTextColumn }           from './typeorm.utils.js'
+import { isUuidColumn }           from './typeorm.utils.js'
 
 export class SeederEntityFactory<Entity extends ObjectLiteral> {
-  private withData: DeepPartial<Entity> = {}
+  private withData: DeepPartial<Entity> = {} as DeepPartial<Entity>
 
   private repository: Repository<Entity>
 
@@ -25,7 +24,7 @@ export class SeederEntityFactory<Entity extends ObjectLiteral> {
     this.repository = this.options.connection.getRepository(this.entity)
   }
 
-  with(data: DeepPartial<Entity> = {}) {
+  with(data: DeepPartial<Entity> = {} as DeepPartial<Entity>) {
     this.withData = { ...this.withData, ...data }
 
     return this
@@ -47,9 +46,13 @@ export class SeederEntityFactory<Entity extends ObjectLiteral> {
     return this.repository.merge(this.repository.create(columns), this.withData)
   }
 
-  private generateColumns(metadata, exclude: Array<string> = []): DeepPartial<Entity> {
+  private generateColumns(
+    metadata: Record<string, any>,
+    exclude: Array<string> = []
+  ): DeepPartial<Entity> {
     const columns = metadata.filterColumns(this.entity)
 
+    // @ts-ignore
     return columns.reduce((result, column) => {
       if (exclude.includes(column.propertyName)) {
         return result
@@ -66,6 +69,7 @@ export class SeederEntityFactory<Entity extends ObjectLiteral> {
     }, {})
   }
 
+  // @ts-ignore
   private generateColumn(column) {
     if (column.options.default) {
       return column.options.default
@@ -85,10 +89,6 @@ export class SeederEntityFactory<Entity extends ObjectLiteral> {
 
     if (isTextColumn(column.options.type)) {
       return generator.text()
-    }
-
-    if (isJsonColumn(column.options.type)) {
-      return generator.json()
     }
 
     if (isUuidColumn(column.options.type)) {

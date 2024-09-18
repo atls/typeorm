@@ -1,3 +1,3 @@
 import { faker } from '@faker-js/faker'
 
-export const numberGenerator = () => faker.datatype.number(1000)
+export const numberGenerator = () => faker.number.int(1000)

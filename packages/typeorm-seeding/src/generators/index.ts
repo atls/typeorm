@@ -1,2 +1,2 @@
-export * from './date.generator'
-export * from './generator'
+export * from './date.generator.js'
+export * from './generator.js'
