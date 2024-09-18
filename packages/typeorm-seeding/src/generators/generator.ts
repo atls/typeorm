@@ -8,7 +8,6 @@ export const generator = {
   number: numberGenerator,
   date: dateGenerator,
   text: textGenerator,
-
   boolean: faker.datatype.boolean,
   uuid: faker.string.uuid,
 }
