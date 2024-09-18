@@ -1,3 +1,3 @@
-export * from './seeder-factory.interfaces'
-export * from './seeder-entity.factory'
-export * from './seeder.factory'
+export * from './seeder-factory.interfaces.js'
+export * from './seeder-entity.factory.js'
+export * from './seeder.factory.js'

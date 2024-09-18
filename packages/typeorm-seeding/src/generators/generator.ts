@@ -1,8 +1,8 @@
 import { faker }           from '@faker-js/faker'
 
-import { dateGenerator }   from './date.generator'
-import { numberGenerator } from './number.generator'
-import { textGenerator }   from './text.generator'
+import { dateGenerator }   from './date.generator.js'
+import { numberGenerator } from './number.generator.js'
+import { textGenerator }   from './text.generator.js'
 
 export const generator = {
   number: numberGenerator,
@@ -10,6 +10,5 @@ export const generator = {
   text: textGenerator,
 
   boolean: faker.datatype.boolean,
-  uuid: faker.datatype.uuid,
-  json: faker.datatype.json,
+  uuid: faker.string.uuid,
 }
