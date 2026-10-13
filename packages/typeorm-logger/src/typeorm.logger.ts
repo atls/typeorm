@@ -1,10 +1,11 @@
-import { Logger }            from '@atls/logger'
-import { Logger as ILogger } from 'typeorm'
+import type { Logger as ILogger } from 'typeorm'
+
+import { Logger }                 from '@atls/logger'
 
 export class TypeOrmLogger implements ILogger {
   private readonly logger = new Logger('typeorm')
 
-  logQuery(query: string, parameters?: any[]) {
+  logQuery(query: string, parameters?: Parameters<ILogger['logQuery']>[1]) {
     this.logger.debug({
       message: 'query',
       sql: {
@@ -14,7 +15,11 @@ export class TypeOrmLogger implements ILogger {
     })
   }
 
-  logQueryError(error: string, query: string, parameters?: any[]) {
+  logQueryError(
+    error: string,
+    query: string,
+    parameters?: Parameters<ILogger['logQueryError']>[2]
+  ) {
     this.logger.error({
       message: error,
       sql: {
@@ -24,7 +29,7 @@ export class TypeOrmLogger implements ILogger {
     })
   }
 
-  logQuerySlow(time: number, query: string, parameters?: any[]) {
+  logQuerySlow(time: number, query: string, parameters?: Parameters<ILogger['logQuerySlow']>[2]) {
     this.logger.warn({
       message: 'slow query',
       sql: {
@@ -43,10 +48,10 @@ export class TypeOrmLogger implements ILogger {
     this.logger.debug(message, { context: 'migration' })
   }
 
-  log(level: 'log' | 'info' | 'warn', message: any) {
+  log(level: 'info' | 'log' | 'warn', message: Parameters<ILogger['log']>[1]) {
     switch (level) {
       case 'log':
-        this.log(level === 'log' ? 'info' : level, message)
+        this.log('info', message)
         break
       case 'info':
         this.logger.info(message)

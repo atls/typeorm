@@ -1,16 +1,20 @@
-import { EntityTarget }           from 'typeorm'
-import { ObjectLiteral }          from 'typeorm'
-import { DeepPartial }            from 'typeorm'
-import { Repository }             from 'typeorm'
-import { getMetadataArgsStorage } from 'typeorm'
+import type { EntityTarget }         from 'typeorm'
+import type { ObjectLiteral }        from 'typeorm'
+import type { DeepPartial }          from 'typeorm'
+import type { Repository }           from 'typeorm'
 
-import { SeederFactoryOptions }   from './seeder-factory.interfaces.js'
-import { generator }              from '../generators/index.js'
-import { isBooleanColumn }        from './typeorm.utils.js'
-import { isNumberColumn }         from './typeorm.utils.js'
-import { isDateColumn }           from './typeorm.utils.js'
-import { isTextColumn }           from './typeorm.utils.js'
-import { isUuidColumn }           from './typeorm.utils.js'
+import type { SeederFactoryOptions } from './seeder-factory.interfaces.js'
+
+import { getMetadataArgsStorage }    from 'typeorm'
+
+import { generator }                 from '../generators/index.js'
+import { isBooleanColumn }           from './typeorm.utils.js'
+import { isNumberColumn }            from './typeorm.utils.js'
+import { isDateColumn }              from './typeorm.utils.js'
+import { isTextColumn }              from './typeorm.utils.js'
+import { isUuidColumn }              from './typeorm.utils.js'
+
+type ColumnMetadata = ReturnType<ReturnType<typeof getMetadataArgsStorage>['filterColumns']>[number]
 
 export class SeederEntityFactory<Entity extends ObjectLiteral> {
   private withData: DeepPartial<Entity> = {} as DeepPartial<Entity>
@@ -47,13 +51,12 @@ export class SeederEntityFactory<Entity extends ObjectLiteral> {
   }
 
   private generateColumns(
-    metadata: Record<string, any>,
+    metadata: ReturnType<typeof getMetadataArgsStorage>,
     exclude: Array<string> = []
   ): DeepPartial<Entity> {
-    const columns = metadata.filterColumns(this.entity)
+    const columns = metadata.filterColumns(this.repository.metadata.target)
 
-    // @ts-ignore
-    return columns.reduce((result, column) => {
+    const generated = columns.reduce<Record<string, unknown>>((result, column) => {
       if (exclude.includes(column.propertyName)) {
         return result
       }
@@ -67,31 +70,40 @@ export class SeederEntityFactory<Entity extends ObjectLiteral> {
         [column.propertyName]: this.generateColumn(column),
       }
     }, {})
+
+    return generated as DeepPartial<Entity>
   }
 
-  // @ts-ignore
-  private generateColumn(column) {
+  private generateColumn(column: ColumnMetadata): unknown {
     if (column.options.default) {
-      return column.options.default
+      const defaultValue: unknown = column.options.default
+
+      return defaultValue
     }
 
-    if (isDateColumn(column.options.type)) {
+    const { type } = column.options
+
+    if (!type) {
+      return undefined
+    }
+
+    if (isDateColumn(type)) {
       return generator.date()
     }
 
-    if (isBooleanColumn(column.options.type)) {
+    if (isBooleanColumn(type)) {
       return generator.boolean()
     }
 
-    if (isNumberColumn(column.options.type)) {
+    if (isNumberColumn(type)) {
       return generator.number()
     }
 
-    if (isTextColumn(column.options.type)) {
+    if (isTextColumn(type)) {
       return generator.text()
     }
 
-    if (isUuidColumn(column.options.type)) {
+    if (isUuidColumn(type)) {
       return generator.uuid()
     }
 
